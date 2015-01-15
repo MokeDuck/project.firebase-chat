@@ -1,0 +1,91 @@
+@import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic,700italic&subset=latin,cyrillic,latin-ext,greek,greek-ext,cyrillic-ext);
+
+body {
+	background: black;
+}
+
+chat-room {
+	position: fixed;
+	top: 25px;
+	bottom: 25px;
+	width: 50%;
+	min-width: 350px;
+	background: #222;
+
+	/* This center the chat room in the page. left: 50% aligns the left edge
+	/* of the chat room with the halfway point of the window, and
+	/* translate(-50%) shifts the chat room left by half its own width,
+	/* centering it. */
+	left: 50%;
+	transform: translate(-50%);
+
+  color: white;
+  font-family: 'Ubuntu Mono';
+}
+
+/** Internal styling **/
+
+chat-message {
+  display: block;
+}
+
+chat-message:before {
+	content: attr(user) ':';
+  color: #07f;
+  padding-right: 9px;
+  padding-left: 9px;
+}
+
+chat-log {
+  position: absolute;
+  bottom: 36px;
+  top: 0;
+  right: 0;
+  left: 0;
+  padding: 9px;
+  overflow: auto;
+}
+
+chat-form {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+}
+
+chat-form input[type="submit"] {
+  display: none;
+}
+
+chat-form > form {
+  display: flex;
+  align-items: center;
+}
+
+chat-form input::selection {
+  background: fuchsia;
+}
+
+chat-form input.username {
+  background: #222;
+  width: 150px;
+  color: white;
+  font-family: 'Ubuntu Mono';
+  font-size: 12pt;
+  border: none;
+  outline: none;
+  padding: 9px;
+}
+
+chat-form input.message {
+  background: #222;
+  flex-grow: 2;
+  width: 100%;
+  color: white;
+  font-family: 'Ubuntu Mono';
+  font-size: 12pt;
+  border: none;
+  outline: none;
+  padding: 9px;
+}
