@@ -300,7 +300,7 @@ Chat.Log = (function() {
 // Relevant methods:
 //   - submit, which posts the current content of the form.
 Chat.Form = (function() {
-  var describe = window.describe || describe;
+  var describe = window.describe || function() { };
   describe('<chat-form>', function() {
     var form, room;
     beforeEach(function() {

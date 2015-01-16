@@ -1,4 +1,4 @@
-# exercise.firebase-chat
+# Firebase Chat Project
 
 In this project, you'll create a chat room. By the end of it, you'll have a
 Javascript program that defines a custom `<chat-room>` tag which you can use
@@ -9,7 +9,7 @@ You'll be using Firebase as the backend.
 [Firebase](http://www.firebase.com) is a database with a few nifty features:
   * You can use it entirely from client side Javascript.
   * (You can also use it from server side Javascript.)
-  * It's designed to handle synchronizing data between multiple users.Changes
+  * It's designed to handle synchronizing data between multiple users. Changes
     to the database are broadcast to all connected clients in real time (think
     Google Docs).
   * It stores structured, JSON-like data.
@@ -23,6 +23,9 @@ These features make it great for implementing a chat room.
       implement the chat room is actually much smaller.
     - The specs are there for a reason: read them and use them to guide your
       development.
+  * Implementing custom tags.
+    - These are a new and quite powerful web development tool for making
+      modular components in web pages.
   * Javascript events and callbacks.
     - What happens when the chat form is submitted?
     - What happens when data in Firebase changes?
@@ -102,8 +105,8 @@ pushes a message into this list.
 
 Two fields are mandatory:
 
-    ts: number,  the message reached the database in
-        milliseconds since the UNIX epoch
+      ts: number, the time the message reached the database in
+          milliseconds since the UNIX epoch
     user: string, the username of the user sending the message
 
 All other fields are optional. To allow for extensibility, chat rooms must
@@ -114,3 +117,44 @@ There is no limit on the size of a message, except those imposed by Firebase.
 Optional fields:
 
     msg: string, the text of a message from the user to the room
+
+## Modularity and further work ##
+
+You can use your new `<chat-room>` tag anywhere. Just include the Javascript
+and CSS files and throw it in the page. It's a bit of a pain to have to
+include multiple files, but [there are
+ways](http://www.html5rocks.com/en/tutorials/webcomponents/imports/) around
+that. If you were packaging this up as a library for other people to use,
+you'd probably use a Javascript compiler to compile and minify all the
+Javascript into one file, too.
+
+Now that you have a basic working chat system, there's a lot you can do with
+it. In addition to the basic coolness of having a 
+
+### Presence ###
+
+You could write and implement an extension to the protocol that handles
+presence. Firebase has [functionality to support
+this](https://www.firebase.com/docs/web/api/ondisconnect/), and it would let
+you display a roster of everyone in the room.
+
+### Authenticated users ###
+
+You might have noticed that right now, anyone can pretend to be anyone else.
+Firebase [supports authentication](https://www.firebase.com/docs/web/guide
+/user-auth.html), so you could let users log in with Github (or Twitter or
+Google or whatever) and display a badge next to authenticated users.
+
+### Video ###
+
+I was inspired to write this exercise when I made a hacky little project: a
+viewing room. It was a chat room just like this one, only it also synchronized
+the playback of a video (using the `<video>` element). You loaded, played, and
+paused videos with commands like `/vid <url>`, `/play`, `/pause`, `/seek
+<time>`, and so on. I extended the message format to include a `video` object
+that held information about the video's URL, current time, and what command
+the user had just run.
+
+You could probably come up with a nicer interface, but this one was quick and
+worked and let me watch TV with my friends across the country. You should make
+one!
