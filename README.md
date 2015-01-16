@@ -129,7 +129,7 @@ you'd probably use a Javascript compiler to compile and minify all the
 Javascript into one file, too.
 
 Now that you have a basic working chat system, there's a lot you can do with
-it. In addition to the basic coolness of having a 
+it.
 
 ### Presence ###
 

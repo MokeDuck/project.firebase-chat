@@ -73,12 +73,16 @@ Chat.Room = (function() {
       describe('connecting to Firebase', function() {
         it('with the db attribute on <chat-room>', function() {
           room.setAttribute('db', 'http://example.firebase');
-          expect(room.db).not.toBeNull();
+          expect(room.db).toEqual(jasmine.objectContaining({
+            child: jasmine.any(Function),
+          }));
         });
     
         it('with <chat-room>.connect', function() {
           room.connect('http://example.firebase');
-          expect(room.db).not.toBeNull();
+          expect(room.db).toEqual(jasmine.objectContaining({
+            child: jasmine.any(Function),
+          }));
         });
       });
   
@@ -143,9 +147,7 @@ Chat.Room = (function() {
   // createdCallback is called by the browser when a new <chat-room> is
   // created. (It is also called for all <chat-room>s in the document).
   Room.createdCallback = function() {
-    this.log = this.querySelector('chat-log') || new Chat.Log();
-    this.appendChild(this.log);
-    this.appendChild(this.form = document.createElement('chat-form'));
+    // TODO: create chat-log and chat-form
     this.connect(this.getAttribute('db'));
   };
   
@@ -153,31 +155,18 @@ Chat.Room = (function() {
   // <chat-room>. Note that this isn't called for the original attribute
   // values.
   Room.attributeChangedCallback = function(attr, oldVal, newVal) {
-    switch (attr) {
-      case 'db':
-        this.connect(newVal);
-        break;
-    }
+    // TODO: connect if we changed the db value
   };
   
   // Connect to a Firebase and set <chat-room>.db to be a reference to it.
   Room.connect = function(url) {
-    if (url) {
-      this.db = new Firebase(url);
-  
-      this.db.child('messages').on('child_added', function(snap) {
-        this.log.append(snap.val());
-      }.bind(this));
-    } else {
-      this.db = null;
-    }
+    // TODO: connect to firebase
   };
   
   // Send a message to the server.
   // Message is a chat room protocol message (see README.md).
   Room.post = function(message) {
-    this.db.child('messages').push(message);
-    // TODO
+    // TODO: post a message to firebase
   };
   
   // Register our element. All <chat-room> tags will now use our prototype.
@@ -240,6 +229,7 @@ Chat.Log = (function() {
           { ts: 15, user: 'audre', msg: 'who am ageless and half-grown' },
         ];
         testMsgs.map(log.append.bind(log));
+        expect(log.querySelector('chat-message')).not.toBeNull();
         log.clear();
         expect(log.querySelector('chat-message')).toBeNull();
       });
@@ -265,22 +255,11 @@ Chat.Log = (function() {
   // Returns the created <chat-message>.
   // Message is a chat room protocol message (see README.md).
   Log.append = function(message) {
-    // TODO
-    var msg = document.createElement('chat-message');
-    msg.setAttribute('timestamp', message.ts);
-    msg.dataset.timestamp = message.ts;
-    msg.setAttribute('user', message.user);
-    msg.textContent = message.msg;
-    this.appendChild(msg);
-    this.scrollTop = this.scrollHeight;
-    return msg;
+    // TODO: append a message to the log
   };
   
   Log.clear = function() {
-    var msgs = this.querySelectorAll('chat-message');
-    var i = msgs.length; while(--i >= 0) {
-      this.removeChild(msgs[i]);
-    }
+    // TODO: remove all messages
   };
   
   // Register <chat-log> and return the constructor.
@@ -363,14 +342,8 @@ Chat.Form = (function() {
     this.innerForm = document.createElement('form');
     this.appendChild(this.innerForm);
   
-    this.username = document.createElement('input');
-    this.username.setAttribute('type', 'text');
-    this.username.setAttribute('class', 'username');
-    this.username.setAttribute('placeholder', 'who are you?');
-    this.message = document.createElement('input');
-    this.message.setAttribute('type', 'text');
-    this.message.setAttribute('class', 'message');  
-    this.message.setAttribute('placeholder', 'say something');
+    // TODO: create rest of form
+
     var submitter = document.createElement('input');
     submitter.setAttribute('type', 'submit');
     this.innerForm.appendChild(this.username);
@@ -388,13 +361,7 @@ Chat.Form = (function() {
   //
   // Returns the message object.
   Form.submit = function() {
-    var msg = {
-      ts: Firebase.ServerValue.TIMESTAMP,
-      user: this.username.value,
-      msg: this.message.value
-    };
-    this.parentNode.post(msg);
-    return msg;
+    // TODO: construct and post a message to the room we're in
   };
   
   // Register <chat-form>
