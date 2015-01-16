@@ -42,11 +42,40 @@ These features make it great for implementing a chat room.
 
 Fork this repo. Don't simply branch it. The reason I'm asking you to do things
 this way is that by forking it, you'll be able to easily host your project on
-Github Pages
+Github Pages.
 
 Go [create a firebase account](https://www.firebase.com/account), and [go
 through the 5-minute tutorial](https://www.firebase.com/tutorial/).
 
+## Implement the chat room ##
+
+The specs have already been written for you. Use them to figure out what needs
+to be done. You can visit [SpecRunner.html](SpecRunner.html) to run them.
+
+There are three main components: `<chat-room>`, `<chat-log>`, and `<chat-form>`.
+
+`<chat-room>` is the main tag that we expect people to use in their pages. It
+creates a `<chat-log>` and a `<chat-form>` inside it.
+
+`<chat-log>` displays the messages in the chat room.
+
+`<chat-form>` gets user input and posts messages to the room.
+
+You can work on them in any order you like. I've sprinkled TODOs throughout
+the code where work needs to be done. To find all of them, you can use grep:
+
+    grep -n TODO chat-room.js
+
+## Try connecting to someone else's room ##
+
+Once you have your chat room working, try setting the db to someone else's
+chat room. If you've both followed the protocol, it should work!
+
+## Host your chat room on Github Pages ##
+
+Hosting a static site on Github pages is easy. Create a `gh-pages` branch and
+push it. Your site should appear at `<your username>.github.io/<repo name>`
+shortly.
 
 ## The chat room protocol ##
 
@@ -57,6 +86,17 @@ Firebase. Your clients will be interoperable—it won't matter if you're using
 my code or yours, we'll still be able to talk to each other.
 
 So let's do that.
+
+### Database structure ###
+
+The structure of a Firebase is basically that of a giant JSON object, a tree
+where every object in the database has some children, which are themselves
+objects which can have children, and so on. Every object has its own URL.
+
+A chat room is a Firebase object. It must have one child, `messages`, though
+it may have others as defined by extensions to this protocol. `messages` is a
+list of messages in the format defined below.. To post to the room, a client
+pushes a message into this list.
 
 ### Message Format ###
 
