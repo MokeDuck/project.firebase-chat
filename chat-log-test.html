@@ -1,14 +1,11 @@
 <!doctype html>
 <html>
   <head>
-    <title>Firebase Chat Project</title>
+    <title>Firebase Chat Project -- Chat log test</title>
     <link rel="stylesheet" href="chat-room.css">
 
     <script src='lib/x-tag-components.min.js' async></script>
-    <script src='lib/firebase.js' async></script>  
     <script src="src/chat-log.js" async></script>
-    <script src="src/chat-form.js" async></script>
-    <script src="src/chat-room.js" async></script>
     <style>
       /* This is just styling for this demo page */
 
@@ -16,7 +13,7 @@
         background: black;
       }
 
-      chat-room {
+      chat-log {
         position: fixed;
         top: 25px;
         bottom: 25px;
@@ -36,7 +33,7 @@
   </style>
   </head>
   <body>
-    <chat-room db="https://glaring-inferno-9508.firebaseio.com/" id="room">
-    </chat-room>
+    <chat-log id="log">
+    </chat-log>
   </body>
 </html>

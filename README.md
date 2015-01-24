@@ -17,64 +17,101 @@ You'll be using Firebase as the backend.
 
 These features make it great for implementing a chat room.
 
-## Learning Goals ##
-  * Get comfy with Javascript and current best practices.
-    - Don't panic! chat-room.js has a lot of code for the specs. The code to
-      implement the chat room is actually much smaller.
-    - The specs are there for a reason: read them and use them to guide your
-      development.
-  * Implementing custom tags.
-    - These are a new and quite powerful web development tool for making
-      modular components in web pages.
-  * Javascript events and callbacks.
-    - What happens when the chat form is submitted?
-    - What happens when data in Firebase changes?
-    - In general, when are event listeners called?
-  * Javascript testing with Jasmine.
-    - How do the specs isolate each component and test its behavior?
-    - How do they test interaction with external components like Firebase?
-  * NoSQL databases
-    - What is the structure of data in Firebase? How does it differ
-      from a relational database?
-    - Pros and cons? When would you use either?
-  * Understand how well defined protocols help interoperability.
-    - Why did I go to the admittedly minimal effort of defining a message
-      format? Why not let everyone come up with their own?
+## Design ##
 
-## Setup: Make your repo and create a Firebase account ##
+We're going to define three custom HTML elements: `<chat-room>`, `<chat-log>`,
+and `<chat-form>`. We'll also use `<chat-message>` tags to hold our chat
+messages, but we don't have to write any Javascript to support them, because
+they're just displaying some content.
 
-Fork this repo. Don't simply branch it. The reason I'm asking you to do things
+If you look in [index.html](index.html), you'll see that it has a `<chat-room>`
+in it:
+
+    <chat-room db="https://your-firebase.firebaseio.com/" id="room">
+    </chat-room>
+
+That's all we have to type into our HTML to create a chat room. We'll write
+Javascript that defines how the `<chat-room>` tag should behave. Our
+Javascript will create `<chat-log>` and `<chat-form>` elements and append them
+to the chat room, so the DOM will ultimately look like this:
+
+    <chat-room db="http://some-firebase.firebase.com">
+      <!-- These elements are created in Javascript -->
+      <chat-log>
+      </chat-log>
+      <chat-form>
+        <form>
+          <input type="text" class="username">
+          <input type="text" class="message">
+          <input type="submit">
+        </form>
+      </chat-form>
+    </chat-form>
+
+We'll get chat messages by listening for changes to Firebase. When a new
+message comes in, we'll make a `<chat-message>` element and append it to the
+log, like so:
+
+    <chat-room db="http://some-firebase.firebase.com">
+      <chat-log>
+        <!-- new chat message: -->
+        <chat-message user="ashi" timestamp="12345436456">Hi</chat-message>
+      </chat-log>
+      <chat-form>
+        <form>
+          <input type="text" class="username">
+          <input type="text" class="message">
+          <input type="submit">
+        </form>
+      </chat-form>
+    </chat-form>
+
+## 1. Fork this repo ##
+
+Don't simply branch it. The reason I'm asking you to do things
 this way is that by forking it, you'll be able to easily host your project on
 Github Pages.
 
-Go [create a firebase account](https://www.firebase.com/account), and [go
+## 2. Create a Firebase account and do their tutorial ##
+
+[Create a firebase account](https://www.firebase.com/account). [Go
 through the 5-minute tutorial](https://www.firebase.com/tutorial/).
 
-## Implement the chat room ##
+## 3. Make the chat log ##
 
-The specs have already been written for you. Use them to figure out what needs
-to be done. You can visit [SpecRunner.html](SpecRunner.html) to run them.
+First, let's get the chat log working. You'll see find the code in
+[src/chat-log.js](src/chat-log.js). You can run the specs by opening
+[SpecRunner.html](SpecRunner.html).
 
-There are three main components: `<chat-room>`, `<chat-log>`, and `<chat-form>`.
+Your chat log's append function should take messages of the format `{ user: "username", ts: timestamp, msg: "message" }`. The format is described in more detail at the end of this readme.
 
-`<chat-room>` is the main tag that we expect people to use in their pages. It
-creates a `<chat-log>` and a `<chat-form>` inside it.
+You'll want to use [document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/document.createElement) to create the message elements and [setAttribute](https://developer.mozilla.org/en-US/docs/Web/API/Element.setAttribute) to set their attributes. There are many more sophisticated HTML template systems, but we're only creating a few elements in this project, so let's do it the old fashioned way.
 
-`<chat-log>` displays the messages in the chat room.
+You can test out your log with [chat-log-test.html](chat-log-test.html), which is just an empty
+document with a `<chat-log>` in it. You should be able to call `log.append({user: 'ashi', ts: 0, msg: 'hi'})` and see a message pop up.
 
-`<chat-form>` gets user input and posts messages to the room.
+## 4. Make the chat room ##
 
-You can work on them in any order you like. I've sprinkled TODOs throughout
-the code where work needs to be done. To find all of them, you can use grep:
+Add [spec/chat-room-spec.js](spec/chat-room-spec.js) to [SpecRunner.html](SpecRunner.html)
+and make those tests pass.
 
-    grep -n TODO chat-room.js
+You'll need to [create a Firebase ref](https://www.firebase.com/docs/web/api/firebase/constructor.html), [get a reference to the "messages" child](https://www.firebase.com/docs/web/api/firebase/child.html), and [listen for "child_added"](https://www.firebase.com/docs/web/api/query/on.html).
 
-## Try connecting to someone else's room ##
+You can test out your room in [index.html](index.html). You don't have a working chat form yet, but if you go to your Firebase dashboard, you should be able to create a "messages" node, add messages to it, and see them pop up in your chat room.
 
-Once you have your chat room working, try setting the db to someone else's
-chat room. If you've both followed the protocol, it should work!
+## 5. Make the chat form ##
 
-## Host your chat room on Github Pages ##
+Add [spec/chat-form-spec.js](spec/chat-form-spec.js) to [SpecRunner.html](SpecRunner.html)
+and make those tests pass.
+
+Once it's working, your chat room should be working.
+
+## 6. Try connecting to someone else's chat room ##
+
+Once you have your chat room working, try setting the db attribute to someone
+else's chat room. If you've both followed the protocol, it should work!
+
+## 7. Host your chat room on Github Pages ##
 
 Hosting a static site on Github pages is easy. Create a `gh-pages` branch and
 push it. Your site should appear at `<your username>.github.io/<repo name>`
@@ -117,44 +154,3 @@ There is no limit on the size of a message, except those imposed by Firebase.
 Optional fields:
 
     msg: string, the text of a message from the user to the room
-
-## Modularity and further work ##
-
-You can use your new `<chat-room>` tag anywhere. Just include the Javascript
-and CSS files and throw it in the page. It's a bit of a pain to have to
-include multiple files, but [there are
-ways](http://www.html5rocks.com/en/tutorials/webcomponents/imports/) around
-that. If you were packaging this up as a library for other people to use,
-you'd probably use a Javascript compiler to compile and minify all the
-Javascript into one file, too.
-
-Now that you have a basic working chat system, there's a lot you can do with
-it.
-
-### Presence ###
-
-You could write and implement an extension to the protocol that handles
-presence. Firebase has [functionality to support
-this](https://www.firebase.com/docs/web/api/ondisconnect/), and it would let
-you display a roster of everyone in the room.
-
-### Authenticated users ###
-
-You might have noticed that right now, anyone can pretend to be anyone else.
-Firebase [supports authentication](https://www.firebase.com/docs/web/guide
-/user-auth.html), so you could let users log in with Github (or Twitter or
-Google or whatever) and display a badge next to authenticated users.
-
-### Video ###
-
-I was inspired to write this exercise when I made a hacky little project: a
-viewing room. It was a chat room just like this one, only it also synchronized
-the playback of a video (using the `<video>` element). You loaded, played, and
-paused videos with commands like `/vid <url>`, `/play`, `/pause`, `/seek
-<time>`, and so on. I extended the message format to include a `video` object
-that held information about the video's URL, current time, and what command
-the user had just run.
-
-You could probably come up with a nicer interface, but this one was quick and
-worked and let me watch TV with my friends across the country. You should make
-one!

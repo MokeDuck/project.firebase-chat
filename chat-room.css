@@ -1,29 +1,12 @@
+/** Internal styling **/
 @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic,700italic&subset=latin,cyrillic,latin-ext,greek,greek-ext,cyrillic-ext);
 
-body {
-	background: black;
-}
-
 chat-room {
-	position: fixed;
-	top: 25px;
-	bottom: 25px;
-	width: 50%;
-	min-width: 350px;
-	background: #222;
-
-	/* This center the chat room in the page. left: 50% aligns the left edge
-	/* of the chat room with the halfway point of the window, and
-	/* translate(-50%) shifts the chat room left by half its own width,
-	/* centering it. */
-	left: 50%;
-	transform: translate(-50%);
-
   color: white;
+  background: black;
   font-family: 'Ubuntu Mono';
+  font-size: 12pt;
 }
-
-/** Internal styling **/
 
 chat-message {
   display: block;
