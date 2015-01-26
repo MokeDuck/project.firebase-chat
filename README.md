@@ -83,6 +83,7 @@ First, let's get the chat log working. You'll find the code in
 [src/chat-log.js](src/chat-log.js). The specs live in [spec/chat-log-spec.js](spec/chat-log-spec.js). You can run the specs by opening [SpecRunner.html](SpecRunner.html).
 
 Your chat log's append function should:
+
     * Take a single argument, a message of the format `{ user: "ashi", ts: 12345436456, msg: "Hi" }`. (The format is described in more detail at the end of this readme.)
     * Create a `<chat-message>` element like this: `<chat-message user="ashi" timestamp="12345436456">Hi</chat-message>`
     * Append that element to the chat log (which should be the current context object, accessible via `this`),
