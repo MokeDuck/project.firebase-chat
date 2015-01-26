@@ -79,43 +79,67 @@ through the 5-minute tutorial](https://www.firebase.com/tutorial/).
 
 ## 3. Make the chat log ##
 
-First, let's get the chat log working. You'll see find the code in
-[src/chat-log.js](src/chat-log.js). You can run the specs by opening
-[SpecRunner.html](SpecRunner.html).
+First, let's get the chat log working. You'll find the code in
+[src/chat-log.js](src/chat-log.js). The specs live in [spec/chat-log-spec.js](spec/chat-log-spec.js). You can run the specs by opening [SpecRunner.html](SpecRunner.html).
 
-Your chat log's append function should take messages of the format `{ user: "username", ts: timestamp, msg: "message" }`. The format is described in more detail at the end of this readme.
+Your chat log's append function should:
+    * Take a single argument, a message of the format `{ user: "ashi", ts: 12345436456, msg: "Hi" }`. (The format is described in more detail at the end of this readme.)
+    * Create a `<chat-message>` element like this: `<chat-message user="ashi" timestamp="12345436456">Hi</chat-message>`
+    * Append that element to the chat log (which should be the current context object, accessible via `this`),
+    * And return the `<chat-message>`.
 
-You'll want to use [document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/document.createElement) to create the message elements and [setAttribute](https://developer.mozilla.org/en-US/docs/Web/API/Element.setAttribute) to set their attributes. There are many more sophisticated HTML template systems, but we're only creating a few elements in this project, so let's do it the old fashioned way.
+You'll want to use [document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/document.createElement) to create the message element, [setAttribute](https://developer.mozilla.org/en-US/docs/Web/API/Element.setAttribute) to set its attributes, and [textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node.textContent) to put the message body inside if. There are many more sophisticated HTML template systems, but we're only creating a few elements in this project, so let's do it the old fashioned way.
 
 You can test out your log with [chat-log-test.html](chat-log-test.html), which is just an empty
-document with a `<chat-log>` in it. You should be able to call `log.append({user: 'ashi', ts: 0, msg: 'hi'})` and see a message pop up.
+document with a `<chat-log>` in it. You should be able to call `log.append` from the Javascript console like so:
+
+    log.append({user: 'ashi', ts: 0, msg: 'hi'});
+
+...and see a message pop up.
 
 ## 4. Make the chat room ##
 
 Add [spec/chat-room-spec.js](spec/chat-room-spec.js) to [SpecRunner.html](SpecRunner.html)
 and make those tests pass.
 
-You'll need to [create a Firebase ref](https://www.firebase.com/docs/web/api/firebase/constructor.html), [get a reference to the "messages" child](https://www.firebase.com/docs/web/api/firebase/child.html), and [listen for "child_added"](https://www.firebase.com/docs/web/api/query/on.html).
+For the constructor, you'll need to create new `<chat-log>` and `<chat-form>` elements, store them in `this.log` and `this.form`, and append them to the chat room (which will be accessible in the context var, `this`). You can create custom tags in exactly the same way you create normal tags, with  `document.createElement`. They come with all the methods you've defined on their prototypes already baked in:
 
-You can test out your room in [index.html](index.html). You don't have a working chat form yet, but if you go to your Firebase dashboard, you should be able to create a "messages" node, add messages to it, and see them pop up in your chat room.
+    >> document.createElement('chat-log')
+    <chat-log></chat-log>
+    >> document.createElement('chat-log').append
+    chat-log.js:16 function (message) {
+        // TODO: make a DOM element to hold the message with document.createElement.
+        //       (The styles are already in place for 'chat-message' elements, so you
+        //       probably want to make one of those).
+        // TODO: add attributes for the timestamp and user.
+        // TODO: append a message element to the log
+      }
+
+For the `connect()` function, you'll need to [create a Firebase ref](https://www.firebase.com/docs/web/api/firebase/constructor.html), [get a reference to the "messages" child](https://www.firebase.com/docs/web/api/firebase/child.html), and [listen for "child_added" on it](https://www.firebase.com/docs/web/api/query/on.html).
+
+You can test out your room in [index.html](index.html). You don't have a working chat form yet, but if you go to your Firebase dashboard, you should be able to create a "messages" node under your database, add messages to it, and see them pop up in your chat room.
 
 ## 5. Make the chat form ##
 
 Add [spec/chat-form-spec.js](spec/chat-form-spec.js) to [SpecRunner.html](SpecRunner.html)
 and make those tests pass.
 
-Once it's working, your chat room should be working.
+Once it's working, your chat room should be working. Go strike up a conversation with someone interesting! Oh, but first, you'll want to have a public URL to give them, so you should...
 
-## 6. Try connecting to someone else's chat room ##
-
-Once you have your chat room working, try setting the db attribute to someone
-else's chat room. If you've both followed the protocol, it should work!
-
-## 7. Host your chat room on Github Pages ##
+## 6. Host your chat room on Github Pages ##
 
 Hosting a static site on Github pages is easy. Create a `gh-pages` branch and
 push it. Your site should appear at `<your username>.github.io/<repo name>`
-shortly.
+shortly (like, in less than five minutes).
+
+If it's not working:
+  * Go to your repo on github and make sure it has a `gh-pages` branch and that branch has the content of your site.
+  * Check your github email—if something went wrong while compiling your site, Github will email you.
+
+## 7. Try connecting to someone else's chat room ##
+
+Once you have your chat room working, try setting the db attribute to someone
+else's chat room. If you've both followed the protocol, it should work!
 
 ## The chat room protocol ##
 
