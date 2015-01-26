@@ -102,7 +102,7 @@ document with a `<chat-log>` in it. You should be able to call `log.append` from
 
 We can call `log.append` in the console because we've set `id='log'` on the `<chat-log>` element. The browser makes elements available as global variables by their IDs (that is, it puts them into `window['some_id']`). It's fine to use this for interactive testing, like we're doing here, but **DON'T RELY ON THIS IN YOUR CODE OR SPECS**. Javascript is constantly evolving. If you pick an ID for your element that gets used by the Window later (something stupid and common, like, I dunno, `log`), all your code will break. You probably don't want to be fishing elements out of the DOM anyway (note that in this whole exercise, we never have to), but if you must, use `document.getElementById('some_id')` or `document.querySelector('#some_id')`.
 
-## !end side note ##
+### !end side note ###
 
 ## 4. Make the chat room ##
 
