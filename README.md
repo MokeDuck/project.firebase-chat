@@ -84,10 +84,10 @@ First, let's get the chat log working. You'll find the code in
 
 Your chat log's append function should:
 
-    * Take a single argument, a message of the format `{ user: "ashi", ts: 12345436456, msg: "Hi" }`. (The format is described in more detail at the end of this readme.)
-    * Create a `<chat-message>` element like this: `<chat-message user="ashi" timestamp="12345436456">Hi</chat-message>`
-    * Append that element to the chat log (which should be the current context object, accessible via `this`),
-    * And return the `<chat-message>`.
+  * Take a single argument, a message of the format `{ user: "ashi", ts: 12345436456, msg: "Hi" }`. (The format is described in more detail at the end of this readme.)
+  * Create a `<chat-message>` element like this: `<chat-message user="ashi" timestamp="12345436456">Hi</chat-message>`
+  * Append that element to the chat log (which should be the current context object, accessible via `this`),
+  * And return the `<chat-message>`.
 
 You'll want to use [document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/document.createElement) to create the message element, [setAttribute](https://developer.mozilla.org/en-US/docs/Web/API/Element.setAttribute) to set its attributes, and [textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node.textContent) to put the message body inside if. There are many more sophisticated HTML template systems, but we're only creating a few elements in this project, so let's do it the old fashioned way.
 
