@@ -92,7 +92,7 @@ Your chat log's append function should:
 You'll want to use [document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/document.createElement) to create the message element, [setAttribute](https://developer.mozilla.org/en-US/docs/Web/API/Element.setAttribute) to set its attributes, and [textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node.textContent) to put the message body inside if. There are many more sophisticated HTML template systems, but we're only creating a few elements in this project, so let's do it the old fashioned way.
 
 You can test out your log with [chat-log-test.html](chat-log-test.html), which is just an empty
-document with a `<chat-log>` in it. You should be able to call `log.append` from the Javascript console like so:
+document with a `<chat-log>` in it. (You can just load the file up in Chrome). You should be able to call `log.append` from the Javascript console like so:
 
     log.append({user: 'ashi', ts: 0, msg: 'hi'});
 
@@ -100,7 +100,7 @@ document with a `<chat-log>` in it. You should be able to call `log.append` from
 
 ### side note! ###
 
-We can call `log.append` in the console because we've set `id='log'` on the `<chat-log>` element. The browser makes elements available as global variables by their IDs (that is, it puts them into `window['some_id']`). It's fine to use this for interactive testing, like we're doing here, but **DON'T RELY ON THIS IN YOUR CODE OR SPECS**. Javascript is constantly evolving. If you pick an ID for your element that gets used by the Window later (something stupid and common, like, I dunno, `log`), all your code will break. You probably don't want to be fishing elements out of the DOM anyway (note that in this whole exercise, we never have to), but if you must, use `document.getElementById('some_id')` or `document.querySelector('#some_id')`.
+We can call `log.append` in the console because we've set `id='log'` on the `<chat-log>` element. The browser makes elements with ids available as global variables (that is, it puts them into `window['their_id']`). It's fine to use this for interactive testing like we're doing here, but **DON'T RELY ON THIS IN YOUR CODE OR SPECS**. Javascript is constantly evolving. If you pick an ID for your element that gets used by the Window later (especially likely if it's something common—like, I dunno, `log`), all your code will expect `window.log` to refer to some element in your page, and it will instead refer to the new logging framework introduced in Javascript 19, and your code will break. You probably don't want to be fishing elements out of the DOM by their ID anyway (note that in this whole exercise, we never have to), but if you must, use `document.getElementById('their_id')` or `document.querySelector('#their_id')`.
 
 ### !end side note ###
 
@@ -130,6 +130,8 @@ You can test out your room in [index.html](index.html). You don't have a working
 
 Add [spec/chat-form-spec.js](spec/chat-form-spec.js) to [SpecRunner.html](SpecRunner.html)
 and make those tests pass.
+
+The chat form element expects to be the child of a chat room element. The division of responsibilities is: the chat form constructs a message object and the chat room writes it to Firebase. As you'll recall (because you wrote it), chat rooms have a `post()` function. You'll need to use [parentNode](https://developer.mozilla.org/en-US/docs/Web/API/Node.parentNode) on your chat form to get the room that contains it.
 
 Once it's working, your chat room should be working. Go strike up a conversation with someone interesting! Oh, but first, you'll want to have a public URL to give them, so you should...
 
